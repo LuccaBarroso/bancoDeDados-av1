@@ -87,6 +87,7 @@ const props = defineProps({
     background-color: transparent;
     margin-block: 10px;
     font-family: 'Switzer', sans-serif;
+    width: 100%;
   }
   button{
     padding: 10px 20px;

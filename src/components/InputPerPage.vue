@@ -58,6 +58,7 @@ const edit = () => {
     margin-top: 10px;
   }
   input{
+    width: 100%;
     color: white;
     padding: 10px 20px;
     border: 1px solid #36413E;

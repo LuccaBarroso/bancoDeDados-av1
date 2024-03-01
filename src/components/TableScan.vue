@@ -2,29 +2,25 @@
 import { ref, watch } from 'vue'
 import axios from 'axios'
 
-const search = ref("")
+const amount = ref()
+const items = ref([])
 const loading = ref(false)
-const message = ref("")
-const error = ref("")
 
-let changeTimeout: number | null | undefined = null
+let amountTimeout: number | null | undefined = null
 
-watch(search, (newVal, oldVal) => {
-  if(changeTimeout) clearTimeout(changeTimeout)
-  message.value = ""
-  error.value = ""
+watch(amount, (newVal, oldVal) => {
+  if(amountTimeout) clearTimeout(amountTimeout)
   if(newVal === "") return
-  changeTimeout = setTimeout(() => {
+  amountTimeout = setTimeout(() => {
     loading.value = true
-    axios.get('http://127.0.0.1:5000/search?key=' + newVal
+    axios.get('http://127.0.0.1:5000/table-scan?amount=' + newVal
     ).then(response => {
       setTimeout(() => {
-        message.value = response.data.result
+        items.value = response.data.result
         loading.value = false
       }, 300)
     }).catch(error => {
       console.log(error)
-      error.value = error
       loading.value = false
     })
   }, 1000)
@@ -38,17 +34,18 @@ watch(search, (newVal, oldVal) => {
 <template>
   <div class="per-page">
     <h2>
-      Buscar
+      Table Scan
     </h2>
-    <input type="text" v-model="search" placeholder="Digite uma palavra." />
+    <input type="text" v-model="amount" placeholder="Quantos item vc quer ver ?" />
     <div class="loading" v-if="loading">
     </div>
-    <p v-if="message">
-      {{message}}
-    </p>
-    <p v-if="error" class="error">
-      {{error}}
-    </p>
+    <div class="grid-items">
+      <div class="item" v-for="item in items" :key="item.id">
+        <p>
+          {{item}}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,6 +59,26 @@ watch(search, (newVal, oldVal) => {
     flex-direction: row;
     justify-content: center;
     margin-top: 10px;
+  }
+  .grid-items{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+    .item{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      text-align: left;
+      background: rgba(54, 65, 62, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      text-align: center;
+      padding: 20px;
+    }
+    @media (max-width: 768px){
+      grid-template-columns: 1fr;
+    }
   }
   h2{
     font-family: 'Khand';
@@ -116,4 +133,4 @@ watch(search, (newVal, oldVal) => {
     }
   }
 
-</style>
+</style>import type { text } from 'stream/consumers';
