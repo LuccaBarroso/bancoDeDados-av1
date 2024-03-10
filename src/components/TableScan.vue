@@ -5,6 +5,7 @@ import axios from 'axios'
 const amount = ref()
 const items = ref([])
 const loading = ref(false)
+const access = ref("")
 
 let amountTimeout: number | null | undefined = null
 
@@ -18,6 +19,7 @@ watch(amount, (newVal, oldVal) => {
       setTimeout(() => {
         items.value = response.data.result
         loading.value = false
+        access.value = response.data.access
       }, 300)
     }).catch(error => {
       console.log(error)
@@ -46,6 +48,9 @@ watch(amount, (newVal, oldVal) => {
         </p>
       </div>
     </div>
+    <p v-if="access" style="margin-top: 3px">
+      quantidade de vezes que o disco foi acessado: {{access}}
+    </p>
   </div>
 </template>
 

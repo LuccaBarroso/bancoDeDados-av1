@@ -6,6 +6,7 @@ const search = ref("")
 const loading = ref(false)
 const message = ref("")
 const error = ref("")
+const access = ref("")
 
 let changeTimeout: number | null | undefined = null
 
@@ -21,6 +22,7 @@ watch(search, (newVal, oldVal) => {
       setTimeout(() => {
         message.value = response.data.result
         loading.value = false
+        access.value = response.data.access
       }, 300)
     }).catch(error => {
       console.log(error)
@@ -48,6 +50,9 @@ watch(search, (newVal, oldVal) => {
     </p>
     <p v-if="error" class="error">
       {{error}}
+    </p>
+    <p v-if="access">
+      quantidade de vezes que o disco foi acessado: {{access}}
     </p>
   </div>
 </template>
