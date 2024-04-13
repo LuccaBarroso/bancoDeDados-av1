@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import InputPerPage from './InputPerPage.vue'
+import InputQuery from './InputQuery.vue'
 import OutputBuckets from './OutputBuckets.vue'
 import TableScan from './TableScan.vue'
 import Search from './Search.vue'
@@ -14,6 +15,8 @@ const infoBuckets = ref({
   overflows: 0,
   message: ''
 })
+
+const curAV = ref(1)
 
 const recomecar = () => {
   console.log('recomecar')
@@ -38,6 +41,10 @@ const avancar = () => {
 
 }
 
+const changePage = (page: number) => {
+  curAV.value = page
+}
+
 
 </script>
 
@@ -46,11 +53,25 @@ const avancar = () => {
     <h1>
       Sistema Banco de Dados
     </h1>
-    <div class="items">
+    <div class="options">
+      <button @click="changePage(1)" :class="[curAV === 1 ? 'current' : '', 'btn']">
+        AV1
+      </button>
+      <button @click="changePage(2)" :class="[curAV === 2 ? 'current' : '', 'btn']">
+        AV2
+      </button>
+      <button @click="changePage(3)" :class="[curAV === 3 ? 'current' : '', 'btn inactive']">
+        AV3
+      </button>
+    </div>
+    <div class="items" v-if="curAV === 1">
       <InputPerPage  @recomecar="recomecar" @avancar="avancar"/>
       <OutputBuckets v-if="isPerPageSet" :colisions="infoBuckets.colisions" :overflows="infoBuckets.overflows" :message="infoBuckets.message"/>
       <Search v-if="isPerPageSet"/>
       <TableScan v-if="isPerPageSet"/>
+    </div>
+    <div class="items" v-if="curAV === 2">
+      <InputQuery />
     </div>
     <div class="loading-overlay" v-if="loading">
       <div class="loading" >
@@ -60,6 +81,56 @@ const avancar = () => {
 </template>
 
 <style scoped lang="scss">
+  button.btn{
+    background: #36413E;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    margin-bottom: 10px;
+    &:hover{
+      background: #2B2B2B;
+    }
+    &.inactive{
+      background: #2B2B2B;
+      cursor: not-allowed;
+    }
+    &::after{
+      content: '';
+      width: 100%;
+      height: 5px;
+      background: #435858;
+      position: absolute;
+      bottom: 0;
+      border-radius: 0 0 4px 4px;
+      left: 0;
+    }
+    &::before{
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #435858;
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%); 
+    }
+    &::before, &::after{
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+    }
+    &.current{
+      &::before, &::after{
+        opacity: 1;
+      }
+    }
+  }
   .card{
     background: rgba(54, 65, 62, 0.1);
     backdrop-filter: blur(10px);
