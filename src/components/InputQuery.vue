@@ -6,7 +6,11 @@ import TreeNode from './TreeNode.vue'
 const emits = defineEmits(['recomecar', 'avancar'])
 
 const query = ref<string>('')
-const result = ref<{ valid: boolean | null; tree: any | null }>({ valid: null, tree: null })
+const result = ref<{ valid: boolean | null; tree: any | null; expression: string }>({
+  valid: null,
+  tree: null,
+  expression: ''
+})
 const loading = ref<boolean>(false)
 
 let timeout: ReturnType<typeof setTimeout> | undefined
@@ -34,7 +38,7 @@ const applyChanges = async () => {
 
     numberTreeNodes(tree, currentNumber) // Função para numerar os nós
 
-    result.value = { valid: response.data.valid, tree: tree }
+    result.value = { valid: response.data.valid, tree: tree, expression: response.data.expression }
   } catch (error) {
     console.error(error)
   } finally {
@@ -61,6 +65,9 @@ const changedInput = () => {
     <div class="display-result invalid" v-if="!loading && result.valid === false">
       <p>Query Invalida!</p>
     </div>
+    <p>
+      {{ result.expression }}
+    </p>
     <div class="display-result" v-if="!loading && result.tree !== null && result.valid === true">
       <div class="tree" style="max-width: 100%; overflow: auto">
         <TreeNode :node="result.tree" />
