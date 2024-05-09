@@ -14,7 +14,7 @@ import MainCard from './components/MainCard.vue'
   display: flex;
   justify-content: center;
   @media (min-width: 992px) {
-    max-width: 900px;
+    max-width: 1280px;
     min-width: 900px;
   }
 }
